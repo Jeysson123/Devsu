@@ -1,0 +1,32 @@
+@use 'colors' as *;
+
+@property --coverage {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 70%;
+
+}
+
+.sideBar {
+    height: 100vh;
+    flex-basis: 25vw;
+    min-width: 10em;
+    background-image: linear-gradient(130deg, $primary-clr var(--coverage),lighten($secundary-clr, 25%));
+    box-shadow: inset 0 0 35px 10px rgba(0, 0, 0, 0.25);
+    transition: --coverage 0.5s ease-out;
+
+    &:hover {
+        --coverage: 50%;
+        transition-timing-function: ease-in;
+    }
+}
+
+.mainContent {
+    height: 100vh;
+    flex-basis: 80vw;
+    background-color: $primary-clr;
+}
+
+.mainWrapper {
+    display: flex;
+}

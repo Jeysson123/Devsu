@@ -1,0 +1,38 @@
+@use '../../layouts/dashboard/colors' as *;
+
+.menuItems {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.menuItem {
+    padding: .5em 1em;
+    border-bottom: 1px solid lightgrey;
+    color: black;
+    font-size: clamp(.5em, 3vw, 1.5em);
+    text-decoration: none;
+
+    &.active {
+        background-color: $interaction-clr;
+    cursor: pointer;
+    color: $primary-clr;
+    text-shadow: 1px 1px 3px black;
+    }
+
+    &:hover {
+    color: $primary-clr;
+    background-color: $secundary-clr;
+    text-shadow: 1px 1px 3px black;
+
+}
+
+    &::first-letter {
+    font-size: 1.15em;
+}
+
+}
+
+
+
+

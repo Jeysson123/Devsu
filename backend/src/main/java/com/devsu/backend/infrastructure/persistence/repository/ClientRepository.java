@@ -1,0 +1,23 @@
+package com.devsu.backend.infrastructure.persistence.repository;
+
+import com.devsu.backend.infrastructure.persistence.Client;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.util.List;
+import java.util.Optional;
+
+public interface ClientRepository extends JpaRepository<Client, Long> {
+
+    @Query(value = "SELECT DISTINCT c FROM Client c LEFT JOIN FETCH c.accounts a LEFT JOIN FETCH a.movements",
+            countQuery = "SELECT count(DISTINCT c) FROM Client c")
+    Page<Client> findAll(Pageable pageable);
+
+    @Query("SELECT DISTINCT c FROM Client c LEFT JOIN FETCH c.accounts a LEFT JOIN FETCH a.movements")
+    List<Client> findAllWithFullHierarchy();
+
+    @Query("SELECT DISTINCT c FROM Client c LEFT JOIN FETCH c.accounts a LEFT JOIN FETCH a.movements WHERE c.id = :id")
+    Optional<Client> findByIdWithFullHierarchy(@Param("id") Long id);
+}

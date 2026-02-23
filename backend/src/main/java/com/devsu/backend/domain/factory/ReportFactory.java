@@ -1,0 +1,22 @@
+package com.devsu.backend.domain.factory;
+
+import com.devsu.backend.web.dto.ReportRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
+
+public final class ReportFactory {
+
+    private ReportFactory() {
+    }
+
+    public static ReportRequest createRequest(String clientName, LocalDateTime startDate,
+                                              LocalDateTime endDate, Pageable pageable) {
+        return ReportRequest.builder()
+                .clientName(clientName)
+                .startDate(startDate)
+                .endDate(endDate)
+                .pageable(pageable)
+                .build();
+    }
+}

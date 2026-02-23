@@ -1,0 +1,149 @@
+@use '../../layouts/dashboard/colors' as *;
+
+.searchContainer {
+    display: flex;
+    align-items: center;
+    margin: 1em;
+    border-radius: 1em;
+    gap: .5em;
+    padding: 1em 1.5em;
+    background-image: linear-gradient(to right, $primary-clr 60%, lighten($secundary-clr, 25%));
+    box-shadow: 0 1px 10px darkgray;
+}
+
+:is(.searchBtn, .addBtn) > svg {
+    aspect-ratio: 1;
+    width: 2.5em;
+    padding: .05em;
+    transition: all .25s ease-in;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $secundary-clr;
+        padding: .25em;
+        border-radius: 1em;
+        outline: 1px solid grey;
+        
+        & > path {
+            fill: $primary-clr;
+        }
+    }
+
+    &:active {
+        background-color: $interaction-clr;
+        transition: background-color 0s;
+        box-shadow: 0 0 3px 1px gray;
+        transform: translateY(1px);
+    }
+}
+
+.searchText {
+    border: none;
+    padding: .75em 1.5em;
+    width: 7.5vw;
+    border-radius: .5em;
+    border-bottom: 1px solid $secundary-clr;
+    transition: width .25s ease-in-out;
+
+    &:focus {
+        outline: none;
+        border-bottom-color: $interaction-clr;
+        width: 25em;
+    }
+
+    &:not(:placeholder-shown){
+        width: 25em;
+    }
+}
+
+.dataTable {
+    width: calc(100% - 2em);
+    position: relative;
+    margin: 1em;
+    padding: 3em .5em 3em .5em;
+    border-radius: 1em;
+    box-shadow: 0 1px 10px darkgray;
+
+    & table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    & :is(th, td) {
+        padding: .75em 1em;
+        text-align: center;
+    }
+
+    & th {
+        background-color: darkgray;
+    }
+
+    & tbody tr:nth-child(even) {
+        background-color: rgba(211, 211, 211, 0.5);
+    }
+
+    & tbody tr:hover {
+        background-color: $secundary-clr;
+    }
+
+    & td:active {
+        background-color: $interaction-clr;
+    }
+}
+
+.addBtn {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+
+
+}
+
+.addBtn > svg {
+    width: 1.5em;
+}
+
+.editRemoveBtns {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+
+    & > svg {
+        aspect-ratio: 1;
+        max-width: 1.5em;
+        cursor: pointer;
+
+        &:hover {
+            fill: $primary-clr;
+        }
+    }
+}
+
+.pagination {
+    position: absolute;
+    bottom: 1em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .25em;
+
+    & svg {
+        aspect-ratio: 1;
+        width: 1em;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.paginationInfo {
+    display: block;
+    text-align: center;
+    font-size: .85em;
+    color: gray;
+    margin-top: .5em;
+}
