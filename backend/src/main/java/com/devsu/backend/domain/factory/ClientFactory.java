@@ -10,7 +10,7 @@ public final class ClientFactory {
     public static Client create(
             String name,
             String gender,
-            int age,
+            Integer age,
             String identification,
             String address,
             String phone,

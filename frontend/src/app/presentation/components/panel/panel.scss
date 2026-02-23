@@ -76,6 +76,7 @@
 
     & th {
         background-color: darkgray;
+        color:$primary-clr
     }
 
     & tbody tr:nth-child(even) {
@@ -146,4 +147,99 @@
     font-size: .85em;
     color: gray;
     margin-top: .5em;
+}
+
+.formOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .35);
+    z-index: 100;
+}
+
+.formPanel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: $primary-clr;
+    border-radius: 1em;
+    padding: 2em;
+    z-index: 101;
+    min-width: 22em;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .2);
+    animation: fadeIn .25s ease-out;
+
+    & h3 {
+        margin: 0 0 1em;
+        color: #333;
+    }
+}
+
+.formGroup {
+    margin-bottom: .5em;
+
+    & label {
+        display: block;
+        font-size: .85em;
+        color: #555;
+        margin-bottom: .25em;
+    }
+
+    & input:not([type='checkbox']) {
+        width: 100%;
+        padding: .45em .75em;
+        border: 1px solid #ccc;
+        border-radius: .5em;
+        box-sizing: border-box;
+        transition: border-color .2s;
+
+        &:focus {
+            outline: none;
+            border-color: $interaction-clr;
+        }
+    }
+}
+
+.checkboxLabel {
+    display: flex !important;
+    align-items: center;
+    gap: .5em;
+    cursor: pointer;
+}
+
+.formActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75em;
+    margin-top: 1.25em;
+
+    & button {
+        padding: .6em 1.5em;
+        border: none;
+        border-radius: .5em;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all .2s;
+    }
+}
+
+.btnCancel {
+    background: #e0e0e0;
+    color: #333;
+
+    &:hover { background: #ccc; }
+}
+
+.btnSave {
+    background: $secundary-clr;
+    color: #0a6e3a;
+
+    &:hover { background: $interaction-clr; color: white; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -48%); }
+    to   { opacity: 1; transform: translate(-50%, -50%); }
 }

@@ -17,7 +17,6 @@ import java.util.Set;
 @Table(name = "clients")
 public class Client extends Person {
 
-    @NotBlank(message = "Client ID is mandatory")
     @Size(min = 5, max = 20)
     private String clientId;
 
