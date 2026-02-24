@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /** DTO representing a single account transaction report with client, account, and movement details. */
 @Getter
 @Builder
-@AllArgsConstructor // <-- Esto crea el constructor con todos los campos
+@AllArgsConstructor
 public class AccountReport {
     private LocalDateTime date;
     private String clientName;
