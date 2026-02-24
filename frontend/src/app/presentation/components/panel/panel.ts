@@ -463,17 +463,37 @@ export class Panel implements OnInit {
     });
   }
 
-  public onAccountChange(): void {
-    const selected = this.accountsList.find((a: any) => a.id === this.movementData.account);
-    this.movementData.balance = selected ? selected.initialBalance : null;
+ public onAccountChange(): void {
+  const selected = this.accountsList.find((a: any) => a.id === this.movementData.account);
+  
+  if (!selected) {
+    this.movementData.balance = null;
+    return;
   }
+
+  // Tomar el último movimiento realizado
+  const lastMovement = selected.movements?.length
+    ? selected.movements.reduce((prev: any, curr: any) => 
+        new Date(prev.date) > new Date(curr.date) ? prev : curr
+      )
+    : null;
+
+  // Si hay movimientos, balance = saldo luego del último movimiento; si no, saldo inicial
+  this.movementData.balance = lastMovement ? lastMovement.balance : selected.initialBalance;
+
+  // Forzar que Angular detecte el cambio
+  this.cdr.detectChanges();
+
+}
 
   public submitMovement(): void {
     const payload = {
       movementType: this.movementData.movementType,
       amount: Number(this.movementData.amount),
-      account: { id: Number(this.movementData.account) }
+      account: { id: Number(this.movementData.account)},
+      balance: Number(this.movementData.balance),
     };
+
     this.httpService.post<any>(this.config['movements'].endpoint, payload).subscribe({
       next: () => { this.movementData = { movementType: '', account: '', amount: null, balance: null }; this.fetchData(); },
       error: (err) => console.error('[Panel movements] Error:', err)

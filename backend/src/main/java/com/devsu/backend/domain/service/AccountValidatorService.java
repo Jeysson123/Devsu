@@ -18,7 +18,7 @@ public class AccountValidatorService {
 
     public Double calculateNewBalance(Account account, Movement movement) {
         String type = movement.getMovementType();
-        Double currentBalance = account.getInitialBalance();
+        Double currentBalance = movement.getBalance();
         Double amount = movement.getAmount();
 
         if ("Credito".equalsIgnoreCase(type)) {
