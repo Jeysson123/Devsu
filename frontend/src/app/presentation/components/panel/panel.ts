@@ -493,11 +493,16 @@ export class Panel implements OnInit {
     }
 
     // Fechas (cualquier campo que contenga 'date' en su key)
-    if (raw && typeof raw === 'string' && key.toLowerCase().includes('date')) {
-      const d = new Date(raw);
-      if (!isNaN(d.getTime())) return d.toLocaleString();
+   if (raw && typeof raw === 'string' && key.toLowerCase().includes('date')) {
+    const isoPart = raw.length > 10 ? raw.substring(0, 10) : raw; // YYYY-MM-DD
+    const d = new Date(isoPart);
+    if (!isNaN(d.getTime())) {
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
     }
-
+  }
     // Si es nulo o indefinido
     if (raw === null || raw === undefined) return '';
 
