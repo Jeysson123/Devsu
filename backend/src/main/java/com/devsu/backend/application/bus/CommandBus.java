@@ -3,6 +3,9 @@ package com.devsu.backend.application.bus;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * CommandBus manages registration and dispatching of command handlers.
+ */
 public class CommandBus {
 
     private final Map<Class<?>, ICommandHandler<?, ?>> handlers = new HashMap<>();

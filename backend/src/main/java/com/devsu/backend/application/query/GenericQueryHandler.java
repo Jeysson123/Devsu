@@ -15,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * GenericQueryHandler processes GenericAction queries for clients, accounts, movements, and reports.
+ */
 @Service
 @RequiredArgsConstructor
 public class GenericQueryHandler implements IQueryHandler<GenericAction, Object> {

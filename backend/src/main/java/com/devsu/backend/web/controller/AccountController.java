@@ -17,9 +17,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
+/** Handles HTTP requests related to Account operations (create, update, delete, retrieve,
+ * and list accounts) and delegates actions to CommandBus and QueryBus. */
 @RestController
 @RequestMapping("/cuentas")
 @RequiredArgsConstructor

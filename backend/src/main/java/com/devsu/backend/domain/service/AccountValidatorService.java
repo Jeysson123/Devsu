@@ -5,10 +5,11 @@ import com.devsu.backend.infrastructure.persistence.Movement;
 import com.devsu.backend.web.config.MessageProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
-import java.util.Set;
 
+/**
+ * AccountValidatorService validates account operations and calculates new balances.
+ */
 @Service
 @RequiredArgsConstructor
 public class AccountValidatorService {

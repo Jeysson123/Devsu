@@ -9,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * MovementRepository provides data access methods for Movement entities, including account joins and search queries.
+ */
 public interface MovementRepository extends JpaRepository<Movement, Long> {
 
     @Query(value = "SELECT m FROM Movement m JOIN FETCH m.account",

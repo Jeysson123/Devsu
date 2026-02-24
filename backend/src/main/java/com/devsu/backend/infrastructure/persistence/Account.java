@@ -7,6 +7,9 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Account entity representing bank accounts with client association and movements.
+ */
 @Getter
 @Setter
 @Entity

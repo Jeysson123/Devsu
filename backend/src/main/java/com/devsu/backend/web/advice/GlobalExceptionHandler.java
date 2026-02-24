@@ -6,9 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import java.util.stream.Collectors;
 
+/**
+ * Global exception handler providing uniform API error responses for validation and general exceptions.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

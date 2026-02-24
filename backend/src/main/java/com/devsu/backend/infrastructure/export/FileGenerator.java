@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * FileGenerator creates PDF and JSON files from given data maps.
+ */
 @Component
 @RequiredArgsConstructor
 public class FileGenerator {

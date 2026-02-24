@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/** Provides authentication endpoints; generates JWT tokens for valid client credentials. */
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor

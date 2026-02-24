@@ -8,6 +8,9 @@ import com.devsu.backend.application.query.GenericQueryHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * BusConfig sets up CommandBus and QueryBus beans with their generic handlers.
+ */
 @Configuration
 public class BusConfig {
 

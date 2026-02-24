@@ -4,6 +4,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 
+/**
+ * JwtTokenFactory generates JWT tokens for clients with a specified expiration.
+ */
 public class JwtTokenFactory {
 
     public static String create(String clientId, String password, String secret, long expiration) {

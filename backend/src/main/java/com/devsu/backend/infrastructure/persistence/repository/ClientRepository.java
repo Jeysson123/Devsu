@@ -9,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ClientRepository provides data access methods for Client entities, including full hierarchy and search queries.
+ */
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query(value = "SELECT DISTINCT c FROM Client c LEFT JOIN FETCH c.accounts a LEFT JOIN FETCH a.movements",

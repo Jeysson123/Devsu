@@ -4,6 +4,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * ExportFactory creates PDF responses for file downloads.
+ */
 public class ExportFactory {
     public static ResponseEntity<byte[]> createPdfResponse(byte[] content, String fileName) {
         HttpHeaders headers = new HttpHeaders();

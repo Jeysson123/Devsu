@@ -7,6 +7,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 
+/**
+ * JwtAuthenticationEntryPoint handles unauthorized access attempts in JWT security.
+ */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** DTO for authentication responses containing the JWT token and its expiration time. */
 @Data
 @Builder
 @AllArgsConstructor

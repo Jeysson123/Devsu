@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.List;
 
+/**
+ * ReportRepository generates paginated account reports with optional search filters.
+ */
 @Repository
 public class ReportRepository {
 

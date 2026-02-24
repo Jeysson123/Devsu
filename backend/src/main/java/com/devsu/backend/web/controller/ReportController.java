@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Map;
 
+/** Provides REST endpoints for generating and exporting reports by client,
+ * date range, and search criteria. */
 @RestController
 @RequestMapping("/reportes")
 @RequiredArgsConstructor

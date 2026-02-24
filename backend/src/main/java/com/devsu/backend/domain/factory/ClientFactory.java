@@ -2,6 +2,9 @@ package com.devsu.backend.domain.factory;
 
 import com.devsu.backend.infrastructure.persistence.Client;
 
+/**
+ * ClientFactory creates Client instances with specified properties.
+ */
 public final class ClientFactory {
 
     private ClientFactory() {

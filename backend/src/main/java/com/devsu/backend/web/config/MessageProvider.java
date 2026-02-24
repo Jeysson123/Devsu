@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/** Centralizes all application messages and JWT configuration loaded from properties. */
 @Component
 @Getter
 public class MessageProvider {

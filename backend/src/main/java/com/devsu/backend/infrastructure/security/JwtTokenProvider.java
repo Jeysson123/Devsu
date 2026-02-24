@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.Base64;
 
+/**
+ * JwtTokenProvider generates, validates, and extracts client info from JWT tokens.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {

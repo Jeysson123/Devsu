@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import java.time.LocalDateTime;
 
+/** DTO representing a single account transaction report with client, account, and movement details. */
 @Getter
 @Builder
 @AllArgsConstructor // <-- Esto crea el constructor con todos los campos

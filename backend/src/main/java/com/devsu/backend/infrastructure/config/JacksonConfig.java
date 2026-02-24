@@ -4,6 +4,9 @@ import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * JacksonConfig registers Hibernate6Module for JSON serialization with Hibernate entities.
+ */
 @Configuration
 public class JacksonConfig {
     @Bean

@@ -5,6 +5,9 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * Person mapped superclass defining common attributes for entities like Client.
+ */
 @Getter
 @Setter
 @MappedSuperclass

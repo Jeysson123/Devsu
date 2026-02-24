@@ -4,6 +4,9 @@ import com.devsu.backend.application.bus.ActionType;
 import com.devsu.backend.application.bus.EntityType;
 import com.devsu.backend.application.bus.GenericAction;
 
+/**
+ * ActionFactory creates GenericAction instances for different entity types.
+ */
 public final class ActionFactory {
 
     private ActionFactory() {}

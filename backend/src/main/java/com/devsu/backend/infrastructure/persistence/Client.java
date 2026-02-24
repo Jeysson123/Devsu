@@ -8,6 +8,9 @@ import lombok.experimental.SuperBuilder;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Client entity extending Person, representing bank clients with accounts.
+ */
 @Getter
 @Setter
 @Entity

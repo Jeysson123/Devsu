@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** DTO for authentication requests containing client ID and password. */
 @Getter
 @Setter
 @AllArgsConstructor

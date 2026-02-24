@@ -5,6 +5,9 @@ import com.devsu.backend.infrastructure.persistence.Movement;
 
 import java.time.LocalDateTime;
 
+/**
+ * MovementFactory creates Movement instances with specified account, type, amount, and balance.
+ */
 public final class MovementFactory {
 
     private MovementFactory() {

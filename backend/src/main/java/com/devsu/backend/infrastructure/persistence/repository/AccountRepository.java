@@ -9,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * AccountRepository provides data access methods for Account entities, including custom queries with movements and clients.
+ */
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query(value = "SELECT DISTINCT a FROM Account a LEFT JOIN FETCH a.movements LEFT JOIN FETCH a.client",

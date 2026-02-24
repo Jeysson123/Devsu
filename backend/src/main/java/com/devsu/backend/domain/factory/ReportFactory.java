@@ -5,6 +5,9 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 
+/**
+ * ReportFactory creates ReportRequest instances with specified parameters.
+ */
 public final class ReportFactory {
 
     private ReportFactory() {

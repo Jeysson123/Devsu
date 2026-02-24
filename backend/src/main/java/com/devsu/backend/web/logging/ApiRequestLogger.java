@@ -2,12 +2,12 @@ package com.devsu.backend.web.logging;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/** Interceptor that logs HTTP request method, URI, response status, and timestamp for API calls. */
 @Component
 public class ApiRequestLogger implements HandlerInterceptor {
 

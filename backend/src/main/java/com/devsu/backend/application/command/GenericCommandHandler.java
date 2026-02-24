@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 
+/**
+ * GenericCommandHandler processes GenericAction commands for clients, accounts, movements, and reports.
+ */
 @Service
 @RequiredArgsConstructor
 public class GenericCommandHandler implements ICommandHandler<GenericAction, Object> {

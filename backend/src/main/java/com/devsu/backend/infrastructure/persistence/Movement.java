@@ -6,6 +6,9 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+/**
+ * Movement entity representing account transactions with type, amount, balance, and date.
+ */
 @Getter
 @Setter
 @Entity
@@ -19,7 +22,6 @@ public class Movement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotNull(message = "Date is mandatory")
     private LocalDateTime date;
 
     @NotBlank(message = "Movement type is mandatory")

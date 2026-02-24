@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 
+/** DTO encapsulating parameters for generating a report: client name,
+ * date range, pagination, and optional search term. */
 @Getter
 @Builder
 public class ReportRequest {

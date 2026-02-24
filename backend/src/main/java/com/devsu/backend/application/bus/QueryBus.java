@@ -3,6 +3,9 @@ package com.devsu.backend.application.bus;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * QueryBus manages registration and dispatching of query handlers.
+ */
 public class QueryBus {
 
     private final Map<Class<?>, IQueryHandler<?, ?>> handlers = new HashMap<>();

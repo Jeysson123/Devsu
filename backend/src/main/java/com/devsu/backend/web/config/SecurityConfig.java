@@ -10,11 +10,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/** Configures Spring Security with JWT authentication, stateless sessions, CORS, and request authorization. */
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtFilter;
-    private final JwtAuthenticationEntryPoint jwtEntryPoint; // Inyecta esto
+    private final JwtAuthenticationEntryPoint jwtEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

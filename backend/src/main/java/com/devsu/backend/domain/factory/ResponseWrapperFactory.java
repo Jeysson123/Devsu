@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ResponseWrapperFactory creates standardized API response wrappers for various scenarios.
+ */
 public class ResponseWrapperFactory {
 
-    // NUEVO: Método para respuestas de éxito estándar
     public static <T> ResponseWrapper<T> successResponse(T data, HttpStatus status) {
         return new ResponseWrapper<>(
                 status.value(),
@@ -17,7 +19,6 @@ public class ResponseWrapperFactory {
         );
     }
 
-    // Método para respuestas simples o listas sin paginar
     public static <T> ResponseWrapper<T> listResponse(T data, HttpStatus successStatus, HttpStatus errorStatus) {
         return new ResponseWrapper<>(
                 data != null ? successStatus.value() : errorStatus.value(),
@@ -26,7 +27,6 @@ public class ResponseWrapperFactory {
         );
     }
 
-    // Método para respuestas paginadas
     public static <T> ResponseWrapper<Map<String, Object>> paginatedResponse(Page<T> page, HttpStatus successStatus) {
         Map<String, Object> paginatedData = new HashMap<>();
         paginatedData.put("content", page.getContent());
