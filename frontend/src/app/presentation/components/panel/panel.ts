@@ -351,8 +351,19 @@ export class Panel implements OnInit {
     URL.revokeObjectURL(url);
   }
 
-  public prevPage(): void { if (this.currentPage > 0) { this.currentPage--; this.fetchData(); } }
-  public nextPage(): void { if (this.currentPage < this.totalPages - 1) { this.currentPage++; this.fetchData(); } }
+  prevPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.fetchData();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.fetchData();
+    }
+  }
 
   public openForm(): void { 
     this.isEditing = false; 

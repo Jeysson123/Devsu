@@ -99,7 +99,7 @@
       @if (screen === 'reports') {
         <!-- ICONO EXPORT -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-          <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 242.7-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7 288 32z"/>
+          <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 242.7-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5 12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7 288 32z"/>
         </svg>
       } @else {
         <!-- ICONO ADD -->
@@ -124,21 +124,34 @@
       @for (row of data; track row.id || row.accountNumber) {
         <tr (click)="screen !== 'movements' && screen !== 'reports' ? selectRow(row) : null" 
             [class.selectedRow]="selectedRow?.id === row.id">
+
           @for (col of headers; track col.key) {
             <td>{{ col.key === 'status' ? (row[col.key] ? 'Activo' : 'Inactivo') : row[col.key] }}</td>
           }
 
-          <!-- EDIT/DELETE only for clients & accounts -->
-          @if (screen !== 'movements' && screen !== 'reports') {
+          <!-- EDIT / DELETE SOLO PARA CLIENTES Y CUENTAS -->
+          @if (screen === 'clients' || screen === 'accounts') {
             <td class="editRemoveBtns">
-              <svg (click)="openEditForm(row)" ...>...</svg>
-              <svg (click)="deleteRow(row)" ...>...</svg>
+              <svg (click)="openEditForm(row); $event.stopPropagation()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M290.74 93.24l128 128-233.37 233.37-128 0 0-128 233.37-233.37zM497.94 74.16c18.75-18.75 18.75-49.14 0-67.88l-60.12-60.12c-18.75-18.75-49.14-18.75-67.88 0l-46.06 46.06 128 128 46.06-46.06z"/>
+              </svg>
+              <svg (click)="deleteRow(row); $event.stopPropagation()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path d="M135.2 17.7C140.6 7 151.7 0 163.6 0h120.7c11.9 0 23 7 28.4 17.7L328 32H432c8.8 0 16 7.2 16 16s-7.2 16-16 16h-16l-21.2 372.1c-1.3 23-20.7 41.9-43.7 41.9H96.9c-23 0-42.4-18.9-43.7-41.9L32 64H16c-8.8 0-16-7.2-16-16s7.2-16 16-16h104l14.2-14.3z"/>
+              </svg>
             </td>
           }
         </tr>
       }
     </tbody>
   </table>
+
+  <!-- PAGINACION ORIGINAL RESTAURADA -->
+  <div class="pagination">
+    <svg (click)="prevPage()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+    <span class="currentPage">{{ currentPage + 1 }} / {{ totalPages }}</span>
+    <svg (click)="nextPage()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M247.1 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L179.2 256 41.9 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg>
+  </div>
+  <span class="paginationInfo">Mostrando {{ rangeStart }} a {{ rangeEnd }} de {{ totalElements }} registros</span>
 </div>
 
 <!-- DETAIL CARD only for clients & accounts -->
