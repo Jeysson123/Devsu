@@ -32,13 +32,7 @@ export class Panel implements OnInit {
   public selectOptions: any = { client: [] };
   public movementData: any = { movementType: '', account: '', amount: null, balance: null };
   public accountsList: any[] = [];
-
-  // Filtros específicos para Reports
-  // NOTE: reportFilters.clientName guarda el id (string) seleccionado en el select.
   public reportFilters = { clientName: '', startDate: '', endDate: '' };
-
-  // Flag para activar el bloque de filtros personalizados para reports.
-  // (Se dejó como propiedad añadida; no quita ninguna línea existente)
   public showReportsFilters = false;
 
   private config: any = {
@@ -119,7 +113,6 @@ export class Panel implements OnInit {
   };
 
   ngOnInit(): void {
-    // Inicialización según pantalla
     this.initializeScreen();
   }
 
@@ -131,11 +124,7 @@ export class Panel implements OnInit {
       this.loadAccounts();
     } else if (this.screen === 'reports') {
       this.loadClientsForFilter();
-      // Activamos el bloque de filtros custom para reports
       this.showReportsFilters = true;
-      // opcional: si quieres que por defecto el tamaño de página en reportes sea 10,
-      // descomenta la siguiente línea:
-      // this.pageSize = 10;
     }
     
     this.fetchData();
@@ -144,8 +133,6 @@ export class Panel implements OnInit {
   private loadClientsForFilter(): void {
     this.httpService.get<any>(`${environment.endpoints.clients}?page=0&size=1000`).subscribe({
       next: (res) => {
-        // -> mapear value = id (string), label = name (igual que accounts)
-        // guardamos id como string para evitar problemas con binding [value] -> ngModel
         this.selectOptions['client'] = (res.data.content || []).map((c: any) => ({
           value: String(c.id), 
           label: c.name
@@ -155,11 +142,7 @@ export class Panel implements OnInit {
       error: (err) => console.error('Error cargando clientes para filtros:', err)
     });
   }
-
-  /**
-   * Busca el nombre del cliente por el id guardado en reportFilters.clientName.
-   * Si no encuentra nada devuelve el id recibido (por seguridad).
-   */
+ 
   private getClientNameById(id: string): string {
     if (!id) return '';
     const list = this.selectOptions['client'] || [];
@@ -171,15 +154,10 @@ export class Panel implements OnInit {
     const screenConfig = this.config[this.screen];
     if (!screenConfig) return;
 
-    // Para evitar doble '?' o errores en la URL construimos con base y luego añadimos parámetros.
-    // Para reportes seguimos el formato:
-    // `${endpoint}?clientName=...&startDate=...&endDate=...&page=${this.currentPage}&size=${this.pageSize}`
     let url = `${screenConfig.endpoint}?page=${this.currentPage}&size=${this.pageSize}`;
 
     if (this.screen === 'reports') {
-      // Construimos desde cero para dejar la URL legible y correcta
       const parts: string[] = [];
-      // clientName: el endpoint que mencionaste espera el NOMBRE (p.ej. Jeysson)
       if (this.reportFilters.clientName) {
         const clientName = this.getClientNameById(this.reportFilters.clientName);
         parts.push(`clientName=${encodeURIComponent(clientName)}`);
@@ -190,13 +168,9 @@ export class Panel implements OnInit {
       if (this.reportFilters.endDate) {
         parts.push(`endDate=${encodeURIComponent(this.reportFilters.endDate + 'T23:59:59')}`);
       }
-      // page & size (aseguramos usar currentPage y pageSize)
       parts.push(`page=${this.currentPage}`);
       parts.push(`size=${this.pageSize}`);
-      // Si hay partes, colocarlas luego del endpoint con '?'
       url = `${screenConfig.endpoint}?${parts.join('&')}`;
-      // EJEMPLO esperado por ti:
-      // /reportes?clientName=Jeysson&startDate=2026-02-24T00:00:00&endDate=2026-02-24T23:59:59&page=0&size=10
     } else {
       const search = this.searchTerm.trim();
       if (search) url += `&searchTerm=${encodeURIComponent(search)}`;
@@ -216,7 +190,6 @@ export class Panel implements OnInit {
     this.totalPages = data.totalPages || 1;
     this.totalElements = data.totalElements || 0;
 
-    // Post-procesamiento para normalizar datos de visualización
     if (this.screen === 'accounts') {
       this.data.forEach(item => {
         if (item.client) {
@@ -232,14 +205,9 @@ export class Panel implements OnInit {
     this.cdr.detectChanges();
   }
 
-  /**
-   * EXPORTAR: construir payload con lo que se está mostrando en pantalla y llamar al endpoint exportar.
-   * El backend responde con base64 'pdf' y 'json' dentro de data; aquí creamos blobs y forzamos la descarga.
-   */
   public exportReport(fileName?: string): void {
-    // Nombre por defecto
+
     const defaultName = fileName || `reporte_${this.screen}_${new Date().toISOString().slice(0,10)}`;
-    // Construir array con las columnas visibles (usar headers configurados)
     const cols = this.headers || [];
     const payloadData = (this.data || []).map(row => this.buildExportRow(row, cols));
 
@@ -248,11 +216,9 @@ export class Panel implements OnInit {
       data: payloadData
     };
 
-    // Llamada al endpoint /reportes/exportar
     this.httpService.post<any>(`${environment.endpoints.reports}/exportar`, payload).subscribe({
       next: (res) => {
-        const body = res.data || res; // dependiendo de la estructura que retorne tu servicio
-        // Si viene pdf en base64
+        const body = res.data || res; 
         if (body.pdf) {
           try {
             const pdfBlob = this.base64ToBlob(body.pdf, 'application/pdf');
@@ -262,7 +228,6 @@ export class Panel implements OnInit {
             console.error('Error convirtiendo pdf base64 a blob:', e);
           }
         }
-        // Si viene json en base64 (como en tu ejemplo)
         if (body.json) {
           try {
             const jsonStr = atob(body.json);
@@ -281,10 +246,6 @@ export class Panel implements OnInit {
     });
   }
 
-  /**
-   * Construye una fila para exportar usando los headers (encabezados) como claves.
-   * Extrae valores "representativos" de objetos anidados (client -> name, account -> accountNumber, etc).
-   */
   private buildExportRow(row: any, cols: any[]): any {
     const out: any = {};
     cols.forEach((col: any) => {
@@ -297,7 +258,6 @@ export class Panel implements OnInit {
         return;
       }
 
-      // Si es objeto, intentar propiedades comunes
       if (typeof val === 'object') {
         if (val.name) val = val.name;
         else if (val.clientName) val = val.clientName;
@@ -307,12 +267,10 @@ export class Panel implements OnInit {
         else val = JSON.stringify(val);
       }
 
-      // Si la columna es fecha, preferimos enviar ISO (si el valor es Date o string parseable)
       if (key.toLowerCase().includes('date') || key.toLowerCase().includes('fecha')) {
         if (val instanceof Date) {
           val = val.toISOString();
         } else if (typeof val === 'string') {
-          // intentar normalizar si ya es ISO-like; si no, dejar tal cual
           const d = new Date(val);
           if (!isNaN(d.getTime())) val = d.toISOString();
         }
@@ -323,9 +281,7 @@ export class Panel implements OnInit {
     return out;
   }
 
-  /**
-   * Convierte base64 a Blob (útil para pdf)
-   */
+
   private base64ToBlob(base64: string, contentType = 'application/pdf'): Blob {
     const byteCharacters = atob(base64);
     const byteNumbers = new Array(byteCharacters.length);
@@ -336,15 +292,12 @@ export class Panel implements OnInit {
     return new Blob([byteArray], { type: contentType });
   }
 
-  /**
-   * Forzar descarga del blob en el cliente
-   */
+ 
   private downloadBlob(blob: Blob, filename: string) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = filename;
-    // En algunos entornos es necesario adjuntarlo al DOM para que funcione
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -378,7 +331,6 @@ export class Panel implements OnInit {
     this.editingId = row.id; 
     this.formData = { ...row }; 
     
-    // Limpieza de objetos complejos para el formulario
     delete this.formData.id; 
     delete this.formData.accounts; 
     delete this.formData.movements; 
@@ -452,7 +404,6 @@ export class Panel implements OnInit {
   }
 
   public onSearch(): void { 
-    // Al presionar la lupa, reiniciamos la página y pedimos datos con los filtros activos
     this.currentPage = 0; 
     this.fetchData(); 
   }
@@ -471,17 +422,14 @@ export class Panel implements OnInit {
     return;
   }
 
-  // Tomar el último movimiento realizado
   const lastMovement = selected.movements?.length
     ? selected.movements.reduce((prev: any, curr: any) => 
         new Date(prev.date) > new Date(curr.date) ? prev : curr
       )
     : null;
 
-  // Si hay movimientos, balance = saldo luego del último movimiento; si no, saldo inicial
   this.movementData.balance = lastMovement ? lastMovement.balance : selected.initialBalance;
 
-  // Forzar que Angular detecte el cambio
   this.cdr.detectChanges();
 
 }
@@ -500,19 +448,16 @@ export class Panel implements OnInit {
     });
   }
 
-  // Método añadido para evitar el error TS2339 y formatear valores en la plantilla
   public getDisplayValue(row: any, field: any): string {
     if (!row) return '';
 
     const key = field?.key ?? '';
     const raw = row[key];
 
-    // Status booleano
     if (key === 'status') {
       return raw ? 'Activo' : 'Inactivo';
     }
 
-    // Fechas (cualquier campo que contenga 'date' en su key)
    if (raw && typeof raw === 'string' && key.toLowerCase().includes('date')) {
     const isoPart = raw.length > 10 ? raw.substring(0, 10) : raw; // YYYY-MM-DD
     const d = new Date(isoPart);
@@ -523,10 +468,8 @@ export class Panel implements OnInit {
       return `${day}/${month}/${year}`;
     }
   }
-    // Si es nulo o indefinido
     if (raw === null || raw === undefined) return '';
 
-    // Si es un array, unir valores útiles
     if (Array.isArray(raw)) {
       return raw.map(item => {
         if (item == null) return '';
@@ -535,14 +478,12 @@ export class Panel implements OnInit {
       }).filter(Boolean).join(', ');
     }
 
-    // Si es un objeto, intentar mostrar una propiedad representativa
     if (typeof raw === 'object') {
       if (raw.name) return raw.name;
       if (raw.label) return raw.label;
       if (raw.accountNumber) return raw.accountNumber;
       if (raw.clientName) return raw.clientName;
       if (raw.id !== undefined) return raw.id.toString();
-      // fallback: stringify (pequeño)
       try {
         return JSON.stringify(raw);
       } catch {
@@ -550,11 +491,9 @@ export class Panel implements OnInit {
       }
     }
 
-    // Por defecto devolver como string
     return String(raw);
   }
 
-  // Getters para UI
   get rangeStart(): number { return this.currentPage * this.pageSize + 1; }
   get rangeEnd(): number { return Math.min(this.rangeStart + this.pageSize - 1, this.totalElements); }
   get headers() { return this.config[this.screen]?.columns || []; }

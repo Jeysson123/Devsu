@@ -1,4 +1,3 @@
-<!-- 🔍 SEARCH BAR (solo para clientes y cuentas) -->
 @if (screen !== 'movements' && screen !== 'reports') {
   <section class="searchContainer">
     <input
@@ -17,7 +16,6 @@
   </section>
 }
 
-<!-- 🔥 FILTERS REPORTS -->
 @if (screen === 'reports') {
   <section class="movementFormContainer">
     <form class="movementForm" (ngSubmit)="onSearch()">
@@ -52,7 +50,6 @@
   </section>
 }
 
-<!-- 🔥 MOVEMENTS FORM -->
 @if (screen === 'movements') {
   <section class="movementFormContainer">
     <form class="movementForm" (ngSubmit)="submitMovement()">
@@ -90,19 +87,15 @@
   </section>
 }
 
-<!-- 🔥 TABLE -->
 <div class="dataTable">
 
-  <!-- ADD / EXPORT BUTTON -->
   @if (screen !== 'movements') {
     <span class="addBtn" (click)="screen === 'reports' ? exportReport() : openForm()">
       @if (screen === 'reports') {
-        <!-- ICONO EXPORT -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 242.7-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5 12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7 288 32z"/>
         </svg>
       } @else {
-        <!-- ICONO ADD -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
           <path d="M256 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 160-160 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l160 0 0 160c0 17.7 14.3 32 32 32s32-14.3 32-32l0-160 160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-160 0 0-160z"/>
         </svg>
@@ -129,7 +122,6 @@
             <td>{{ col.key === 'status' ? (row[col.key] ? 'Activo' : 'Inactivo') : row[col.key] }}</td>
           }
 
-          <!-- EDIT / DELETE SOLO PARA CLIENTES Y CUENTAS -->
           @if (screen === 'clients' || screen === 'accounts') {
             <td class="editRemoveBtns">
               <svg (click)="openEditForm(row); $event.stopPropagation()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -145,7 +137,6 @@
     </tbody>
   </table>
 
-  <!-- PAGINACION ORIGINAL RESTAURADA -->
   <div class="pagination">
     <svg (click)="prevPage()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
     <span class="currentPage">{{ currentPage + 1 }} / {{ totalPages }}</span>
@@ -154,7 +145,6 @@
   <span class="paginationInfo">Mostrando {{ rangeStart }} a {{ rangeEnd }} de {{ totalElements }} registros</span>
 </div>
 
-<!-- DETAIL CARD only for clients & accounts -->
 @if (selectedRow && screen !== 'movements' && screen !== 'reports') {
   <div class="detailCard">
     <span class="detailClose" (click)="selectedRow = null">&times;</span>
@@ -170,7 +160,6 @@
   </div>
 }
 
-<!-- MODAL FORM only for clients & accounts -->
 @if (showForm && screen !== 'movements' && screen !== 'reports') {
   <div class="formOverlay" (click)="closeForm()"></div>
   <div class="formPanel">

@@ -2,6 +2,7 @@ import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { tap, catchError, throwError } from 'rxjs';
 import { AlertService } from '../service/AlertService';
+import { environment } from '../../../environments/environment';
 
 export const httpMessageInterceptor: HttpInterceptorFn = (req, next) => {
   const alertService = inject(AlertService);
@@ -11,7 +12,10 @@ export const httpMessageInterceptor: HttpInterceptorFn = (req, next) => {
     tap((event) => {
       if (isMutation && event instanceof HttpResponse) {
         const body = event.body as any;
-        if (body && body.data !== undefined) {
+        if (req.url.includes(environment.endpoints.reports) && body?.data) {
+          alertService.show('Reporte generado correctamente', true);
+        }
+        else if (body && body.data !== undefined) {
           alertService.show(body.data, body.success);
         }
       }
