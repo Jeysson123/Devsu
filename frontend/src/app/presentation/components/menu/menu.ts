@@ -1,4 +1,3 @@
-// src/app/presentation/components/menu/menu.ts
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 

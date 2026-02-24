@@ -16,12 +16,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     switchMap(() => next(addToken(authService.getToken())))
   );
 
-  // Si no hay token o expiró en cliente, renovar antes de enviar
   if (!authService.getToken() || authService.isTokenExpired()) {
     return loginAndRetry();
   }
 
-  // Enviar con token actual, si el backend rechaza con 401, renovar y reintentar
   return next(addToken(authService.getToken())).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {

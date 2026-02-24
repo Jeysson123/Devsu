@@ -145,7 +145,35 @@
   <span class="paginationInfo">Mostrando {{ rangeStart }} a {{ rangeEnd }} de {{ totalElements }} registros</span>
 </div>
 
-@if (selectedRow && screen !== 'movements' && screen !== 'reports') {
+@if (selectedRow && screen === 'clients') {
+  <div class="detailCard" style="overflow-y: auto; max-height: 15em;">
+    <span class="detailClose" (click)="selectedRow = null">&times;</span>
+    <h3>Detalle Cliente</h3>
+
+    <!-- Info general del cliente -->
+    <div class="detailGrid">
+      @for (field of detailFields; track field.key) {
+        <div class="detailItem">
+          <span class="detailLabel">{{ field.label }}</span>
+          <span class="detailValue">{{ getDisplayValue(selectedRow, field) }}</span>
+        </div>
+      }
+    </div>
+
+    <!-- Cuentas y movimientos -->
+    <h3>Cuentas</h3>
+    <div *ngFor="let acc of selectedRow.accounts">
+      <p><strong>{{ acc.accountNumber }}</strong> ({{ acc.accountType }}) - Saldo inicial: {{ acc.initialBalance }}</p>
+      <ul>
+        @for (mv of acc.movements; track mv.id) {
+          <li>{{ mv.date | date:'dd/MM/yyyy' }} - {{ mv.movementType }} - Monto: {{ mv.amount }} - Saldo: {{ mv.balance }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+}
+
+@if (selectedRow && screen !== 'movements' && screen !== 'reports' && screen !== 'clients') {
   <div class="detailCard">
     <span class="detailClose" (click)="selectedRow = null">&times;</span>
     <h3>Detalle</h3>
