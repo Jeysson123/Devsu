@@ -13,6 +13,6 @@ export class App {
   protected readonly title = signal('frontend');
   
   constructor() {
-    console.log('APP INIT - El interceptor manejará la autenticación automáticamente');
+    console.log('APP INIT - Iniciando...');
   }
 }
