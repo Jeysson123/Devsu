@@ -29,6 +29,8 @@ export class Panel implements OnInit {
   public editingId: number | null = null;
   public formData: any = {};
   public selectOptions: any = {};
+  public movementData: any = { movementType: '', account: '', amount: null, balance: null };
+  public accountsList: any[] = [];
 
   private config: any = {
     clients: {
@@ -59,6 +61,16 @@ export class Panel implements OnInit {
         { label: 'Estado', key: 'status', type: 'checkbox' }
       ]
     },
+    movements: {
+      endpoint: environment.endpoints.movements,
+      columns: [
+        { header: 'Fecha', key: 'date' },
+        { header: 'Tipo', key: 'movementType' },
+        { header: 'Monto', key: 'amount' },
+        { header: 'Saldo', key: 'balance' },
+        { header: 'Cuenta', key: 'accountNumber' }
+      ]
+    },
     accounts: {
       endpoint: environment.endpoints.accounts,
       columns: [
@@ -87,6 +99,9 @@ export class Panel implements OnInit {
 
   ngOnInit(): void {
     this.fetchData();
+    if (this.screen === 'movements') {
+      this.loadAccounts();
+    }
   }
 
   private fetchData(): void {
@@ -103,6 +118,13 @@ export class Panel implements OnInit {
             if (item.client) {
               item.clientName = item.client.name;
               item.clientIdRef = item.client.id;
+            }
+          });
+        }
+        if (this.screen === 'movements') {
+          this.data.forEach((item: any) => {
+            if (item.account) {
+              item.accountNumber = item.account.accountNumber;
             }
           });
         }
@@ -222,6 +244,35 @@ export class Panel implements OnInit {
   onSearch(): void {
     this.currentPage = 0;
     this.fetchData();
+  }
+
+  private loadAccounts(): void {
+    this.httpService.get<any>(`${environment.endpoints.accounts}?page=0&size=1000`).subscribe({
+      next: (res) => {
+        this.accountsList = res.data.content || [];
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  onAccountChange(): void {
+    const selected = this.accountsList.find((a: any) => a.id === this.movementData.account);
+    this.movementData.balance = selected ? selected.initialBalance : null;
+  }
+
+  submitMovement(): void {
+    const payload = {
+      movementType: this.movementData.movementType,
+      amount: Number(this.movementData.amount),
+      account: { id: Number(this.movementData.account) }
+    };
+    this.httpService.post<any>(this.config['movements'].endpoint, payload).subscribe({
+      next: () => {
+        this.movementData = { movementType: '', account: '', amount: null, balance: null };
+        this.fetchData();
+      },
+      error: (err) => console.error('[Panel movements] Error:', err)
+    });
   }
 
   get rangeStart(): number { return this.currentPage * this.pageSize + 1; }

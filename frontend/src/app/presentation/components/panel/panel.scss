@@ -309,3 +309,69 @@
     from { opacity: 0; transform: translate(-50%, -48%); }
     to   { opacity: 1; transform: translate(-50%, -50%); }
 }
+
+.movementFormContainer {
+    margin: 1em;
+    padding: 1em 1.5em;
+    border-radius: 1em;
+    background-image: linear-gradient(to right, $primary-clr 60%, lighten($secundary-clr, 25%));
+    box-shadow: 0 1px 10px darkgray;
+}
+
+.movementForm {
+    display: flex;
+    align-items: flex-end;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.mfGroup {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 8em;
+
+    & label {
+        font-size: .8em;
+        color: #555;
+        margin-bottom: .25em;
+        font-weight: 600;
+    }
+
+    & input, & select {
+        padding: .5em .75em;
+        border: 1px solid #ccc;
+        border-radius: .5em;
+        background: white;
+        transition: border-color .2s;
+
+        &:focus {
+            outline: none;
+            border-color: $interaction-clr;
+        }
+    }
+
+    & input[readonly] {
+        background: #e9e9e9;
+        color: #666;
+        cursor: not-allowed;
+    }
+}
+
+.mfBtn {
+    padding: .6em 1.5em;
+    border: none;
+    border-radius: .5em;
+    background: $secundary-clr;
+    color: #0a6e3a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    align-self: flex-end;
+    white-space: nowrap;
+
+    &:hover {
+        background: $interaction-clr;
+        color: white;
+    }
+}
