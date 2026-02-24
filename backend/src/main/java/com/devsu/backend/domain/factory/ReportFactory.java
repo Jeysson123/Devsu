@@ -11,12 +11,13 @@ public final class ReportFactory {
     }
 
     public static ReportRequest createRequest(String clientName, LocalDateTime startDate,
-                                              LocalDateTime endDate, Pageable pageable) {
+                                              LocalDateTime endDate, Pageable pageable, String searchTerm) {
         return ReportRequest.builder()
                 .clientName(clientName)
                 .startDate(startDate)
                 .endDate(endDate)
                 .pageable(pageable)
+                .searchTerm(searchTerm)
                 .build();
     }
 }

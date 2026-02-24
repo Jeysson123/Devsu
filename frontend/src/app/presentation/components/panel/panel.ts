@@ -22,10 +22,13 @@ export class Panel implements OnInit {
   public totalElements = 0;
   public pageSize = 5;
 
+  public searchTerm = '';
+  public selectedRow: any = null;
   public showForm = false;
   public isEditing = false;
   public editingId: number | null = null;
   public formData: any = {};
+  public selectOptions: any = {};
 
   private config: any = {
     clients: {
@@ -55,6 +58,30 @@ export class Panel implements OnInit {
         { label: 'Contraseña', key: 'password', type: 'password' },
         { label: 'Estado', key: 'status', type: 'checkbox' }
       ]
+    },
+    accounts: {
+      endpoint: environment.endpoints.accounts,
+      columns: [
+        { header: 'Número', key: 'accountNumber' },
+        { header: 'Tipo', key: 'accountType' },
+        { header: 'Saldo Inicial', key: 'initialBalance' },
+        { header: 'Estado', key: 'status' },
+        { header: 'Cliente', key: 'clientName' }
+      ],
+      createFields: [
+        { label: 'Número de cuenta', key: 'accountNumber', type: 'text' },
+        { label: 'Tipo de cuenta', key: 'accountType', type: 'select', options: [{value: 'Ahorros', label: 'Ahorros'}, {value: 'Corriente', label: 'Corriente'}] },
+        { label: 'Saldo inicial', key: 'initialBalance', type: 'number' },
+        { label: 'Estado', key: 'status', type: 'checkbox' },
+        { label: 'Cliente', key: 'client', type: 'select', optionsFrom: environment.endpoints.clients, optionLabel: 'name', optionValue: 'id' }
+      ],
+      editFields: [
+        { label: 'Número de cuenta', key: 'accountNumber', type: 'text' },
+        { label: 'Tipo de cuenta', key: 'accountType', type: 'select', options: [{value: 'Ahorros', label: 'Ahorros'}, {value: 'Corriente', label: 'Corriente'}] },
+        { label: 'Saldo inicial', key: 'initialBalance', type: 'number' },
+        { label: 'Estado', key: 'status', type: 'checkbox' },
+        { label: 'Cliente', key: 'client', type: 'select', optionsFrom: environment.endpoints.clients, optionLabel: 'name', optionValue: 'id' }
+      ]
     }
   };
 
@@ -66,10 +93,19 @@ export class Panel implements OnInit {
     const screenConfig = this.config[this.screen];
     if (!screenConfig) return;
 
-    const url = `${screenConfig.endpoint}?page=${this.currentPage}&size=${this.pageSize}`;
+    const search = this.searchTerm.trim();
+    const url = `${screenConfig.endpoint}?page=${this.currentPage}&size=${this.pageSize}${search ? '&searchTerm=' + encodeURIComponent(search) : ''}`;
     this.httpService.get<any>(url).subscribe({
       next: (res) => {
         this.data = res.data.content;
+        if (this.screen === 'accounts') {
+          this.data.forEach((item: any) => {
+            if (item.client) {
+              item.clientName = item.client.name;
+              item.clientIdRef = item.client.id;
+            }
+          });
+        }
         this.currentPage = res.data.currentPage;
         this.totalPages = res.data.totalPages;
         this.totalElements = res.data.totalElements;
@@ -97,6 +133,7 @@ export class Panel implements OnInit {
     this.isEditing = false;
     this.editingId = null;
     this.formData = { status: true };
+    this.loadSelectOptions();
     this.showForm = true;
   }
 
@@ -106,6 +143,14 @@ export class Panel implements OnInit {
     this.formData = { ...row };
     delete this.formData.id;
     delete this.formData.accounts;
+    delete this.formData.movements;
+    // Para accounts: cargar clientIdRef como valor del select de cliente
+    if (row.clientIdRef) {
+      this.formData.client = row.clientIdRef;
+      delete this.formData.clientIdRef;
+      delete this.formData.clientName;
+    }
+    this.loadSelectOptions();
     this.showForm = true;
   }
 
@@ -120,9 +165,10 @@ export class Panel implements OnInit {
     const screenConfig = this.config[this.screen];
     if (!screenConfig) return;
 
+    const payload = this.preparePayload();
     const request$ = this.isEditing
-      ? this.httpService.put<any>(`${screenConfig.endpoint}/${this.editingId}`, this.formData)
-      : this.httpService.post<any>(screenConfig.endpoint, this.formData);
+      ? this.httpService.put<any>(`${screenConfig.endpoint}/${this.editingId}`, payload)
+      : this.httpService.post<any>(screenConfig.endpoint, payload);
 
     request$.subscribe({
       next: () => {
@@ -142,9 +188,54 @@ export class Panel implements OnInit {
     });
   }
 
+  selectRow(row: any): void {
+    this.selectedRow = this.selectedRow?.id === row.id ? null : row;
+  }
+
+  private loadSelectOptions(): void {
+    const fields = this.formFields;
+    fields.filter((f: any) => f.optionsFrom).forEach((f: any) => {
+      this.httpService.get<any>(`${f.optionsFrom}?page=0&size=1000`).subscribe({
+        next: (res) => {
+          this.selectOptions[f.key] = (res.data.content || []).map((item: any) => ({
+            value: item[f.optionValue], label: item[f.optionLabel]
+          }));
+          this.cdr.detectChanges();
+        }
+      });
+    });
+  }
+
+  private preparePayload(): any {
+    const data = { ...this.formData };
+    delete data.clientName;
+    delete data.clientIdRef;
+    const fields = this.formFields;
+    fields.filter((f: any) => f.optionsFrom).forEach((f: any) => {
+      if (data[f.key]) {
+        data[f.key] = { [f.optionValue]: Number(data[f.key]) };
+      }
+    });
+    return data;
+  }
+
+  onSearch(): void {
+    this.currentPage = 0;
+    this.fetchData();
+  }
+
   get rangeStart(): number { return this.currentPage * this.pageSize + 1; }
   get rangeEnd(): number { return Math.min(this.rangeStart + this.pageSize - 1, this.totalElements); }
+  getDisplayValue(row: any, field: any): string {
+    const val = row[field.key];
+    if (val === null || val === undefined) return '—';
+    if (field.key === 'status') return val ? 'Activo' : 'Inactivo';
+    if (typeof val === 'object' && field.optionLabel) return val[field.optionLabel] ?? '—';
+    return val;
+  }
+
   get headers() { return this.config[this.screen]?.columns || []; }
+  get detailFields() { return this.config[this.screen]?.editFields || []; }
   get formFields() {
     const cfg = this.config[this.screen];
     return this.isEditing ? (cfg?.editFields || []) : (cfg?.createFields || []);

@@ -187,13 +187,15 @@
         margin-bottom: .25em;
     }
 
-    & input:not([type='checkbox']) {
+    & input:not([type='checkbox']),
+    & select {
         width: 100%;
         padding: .45em .75em;
         border: 1px solid #ccc;
         border-radius: .5em;
         box-sizing: border-box;
         transition: border-color .2s;
+        background: white;
 
         &:focus {
             outline: none;
@@ -237,6 +239,70 @@
     color: #0a6e3a;
 
     &:hover { background: $interaction-clr; color: white; }
+}
+
+.selectedRow {
+    outline: 2px solid $interaction-clr;
+    background-color: rgba($secundary-clr, .35) !important;
+}
+
+.detailCard {
+    position: relative;
+    margin: 1em;
+    padding: 1.5em 2em;
+    border-radius: 1em;
+    background: linear-gradient(135deg, $primary-clr, lighten($secundary-clr, 25%));
+    box-shadow: 0 2px 15px rgba(0, 0, 0, .15);
+    animation: slideUp .3s ease-out;
+
+    & h3 {
+        margin: 0 0 .75em;
+        color: #333;
+        font-size: 1.1em;
+    }
+}
+
+.detailClose {
+    position: absolute;
+    top: .5em;
+    right: 1em;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #999;
+    transition: color .2s;
+
+    &:hover { color: #333; }
+}
+
+.detailGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75em 2em;
+}
+
+.detailItem {
+    display: flex;
+    flex-direction: column;
+    min-width: 8em;
+}
+
+.detailLabel {
+    font-size: .7em;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #777;
+    font-weight: 600;
+}
+
+.detailValue {
+    font-size: .95em;
+    font-weight: 500;
+    color: #222;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {

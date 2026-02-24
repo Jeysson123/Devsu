@@ -1,6 +1,6 @@
 package com.devsu.backend.infrastructure.persistence;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -33,6 +33,6 @@ public class Movement {
     @NotNull(message = "Account is mandatory")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnoreProperties({"movements", "client"})
     private Account account;
 }

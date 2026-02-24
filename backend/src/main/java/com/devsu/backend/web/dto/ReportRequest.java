@@ -11,5 +11,10 @@ public class ReportRequest {
     private final String clientName;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
-    private final Pageable pageable; // Cambiamos page/size por Pageable
+    private final Pageable pageable;
+    private final String searchTerm;
+
+    public boolean hasSearch() {
+        return searchTerm != null && !searchTerm.isBlank();
+    }
 }

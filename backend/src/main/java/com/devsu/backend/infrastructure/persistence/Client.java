@@ -1,6 +1,6 @@
 package com.devsu.backend.infrastructure.persistence;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -29,6 +29,6 @@ public class Client extends Person {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
-    @JsonManagedReference
+    @JsonIgnoreProperties({"client", "movements"})
     private Set<Account> accounts = new HashSet<>();
 }

@@ -9,6 +9,7 @@ import com.devsu.backend.infrastructure.persistence.repository.ClientRepository;
 import com.devsu.backend.infrastructure.persistence.repository.MovementRepository;
 import com.devsu.backend.infrastructure.persistence.repository.ReportRepository;
 import com.devsu.backend.web.dto.ReportRequest;
+import com.devsu.backend.web.dto.SearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,11 @@ public class GenericQueryHandler implements IQueryHandler<GenericAction, Object>
             case GET_BY_ID:
                 return clientRepository.findByIdWithFullHierarchy((Long) payload).orElse(null);
             case GET_ALL:
+                if (payload instanceof SearchRequest sr) {
+                    return sr.hasSearch()
+                            ? clientRepository.searchAll(sr.searchTerm(), sr.pageable())
+                            : clientRepository.findAll(sr.pageable());
+                }
                 if (payload instanceof Pageable) {
                     return clientRepository.findAll((Pageable) payload);
                 }
@@ -64,6 +70,11 @@ public class GenericQueryHandler implements IQueryHandler<GenericAction, Object>
                 if (!(payload instanceof Long)) return null;
                 return accountRepository.findByIdWithMovements((Long) payload).orElse(null);
             case GET_ALL:
+                if (payload instanceof SearchRequest sr) {
+                    return sr.hasSearch()
+                            ? accountRepository.searchAll(sr.searchTerm(), sr.pageable())
+                            : accountRepository.findAll(sr.pageable());
+                }
                 if (payload instanceof Pageable) {
                     return accountRepository.findAll((Pageable) payload);
                 }
@@ -79,6 +90,11 @@ public class GenericQueryHandler implements IQueryHandler<GenericAction, Object>
                 if (!(payload instanceof Long)) return null;
                 return movementRepository.findById((Long) payload).orElse(null);
             case GET_ALL:
+                if (payload instanceof SearchRequest sr) {
+                    return sr.hasSearch()
+                            ? movementRepository.searchAll(sr.searchTerm(), sr.pageable())
+                            : movementRepository.findAll(sr.pageable());
+                }
                 if (payload instanceof Pageable) {
                     return movementRepository.findAll((Pageable) payload);
                 }
@@ -96,7 +112,8 @@ public class GenericQueryHandler implements IQueryHandler<GenericAction, Object>
                     request.getClientName(),
                     request.getStartDate(),
                     request.getEndDate(),
-                    request.getPageable()
+                    request.getPageable(),
+                    request.getSearchTerm()
             );
         }
         throw new IllegalArgumentException("Unsupported report action or invalid payload");

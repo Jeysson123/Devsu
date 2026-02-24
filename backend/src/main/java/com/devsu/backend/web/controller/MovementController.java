@@ -8,6 +8,7 @@ import com.devsu.backend.domain.factory.ResponseWrapperFactory;
 import com.devsu.backend.infrastructure.persistence.Movement;
 import com.devsu.backend.web.config.MessageProvider;
 import com.devsu.backend.web.dto.ResponseWrapper;
+import com.devsu.backend.web.dto.SearchRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page; // IMPORTANTE: Usamos Page
@@ -67,11 +68,11 @@ public class MovementController {
     @GetMapping
     @SuppressWarnings("unchecked")
     public ResponseEntity<ResponseWrapper<Map<String, Object>>> getAllMovements(
-            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestParam(required = false) String searchTerm) {
 
-        // El bus ahora devuelve el objeto Page completo con su metadata
         Page<Movement> page = (Page<Movement>) queryBus.dispatch(
-                ActionFactory.createMovementAction(ActionType.GET_ALL, pageable)
+                ActionFactory.createMovementAction(ActionType.GET_ALL, new SearchRequest(pageable, searchTerm))
         );
 
         return ResponseEntity.ok(

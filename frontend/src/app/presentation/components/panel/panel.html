@@ -1,6 +1,6 @@
 <section class="searchContainer">
-    <input type="text" name="searchText" class="searchText" id="searchText" placeholder="Buscar">
-    <span class="searchBtn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M448 449L301.2 300.2c20-27.9 31.9-62.2 31.9-99.2 0-93.1-74.7-168.9-166.5-168.9-91.9-.1-166.6 75.7-166.6 168.8S74.7 369.8 166.5 369.8c39.8 0 76.3-14.2 105-37.9L417.5 480 448 449zM166.5 330.8c-70.6 0-128.1-58.3-128.1-129.9S95.9 71 166.5 71 294.6 129.3 294.6 200.9 237.2 330.8 166.5 330.8z"/></svg></span>
+    <input type="text" [(ngModel)]="searchTerm" name="searchText" class="searchText" id="searchText" placeholder="Buscar" (keyup.enter)="onSearch()">
+    <span class="searchBtn" (click)="onSearch()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M448 449L301.2 300.2c20-27.9 31.9-62.2 31.9-99.2 0-93.1-74.7-168.9-166.5-168.9-91.9-.1-166.6 75.7-166.6 168.8S74.7 369.8 166.5 369.8c39.8 0 76.3-14.2 105-37.9L417.5 480 448 449zM166.5 330.8c-70.6 0-128.1-58.3-128.1-129.9S95.9 71 166.5 71 294.6 129.3 294.6 200.9 237.2 330.8 166.5 330.8z"/></svg></span>
 </section>
 
 <div class="dataTable">
@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             @for (row of data; track row.id) {
-                <tr>
+                <tr (click)="selectRow(row)" [class.selectedRow]="selectedRow?.id === row.id">
                     @for (col of headers; track col.key) {
                         <td>{{ col.key === 'status' ? (row[col.key] ? 'Activo' : 'Inactivo') : row[col.key] }}</td>
                     }
@@ -36,6 +36,21 @@
     <span class="paginationInfo">Mostrando {{ rangeStart }} a {{ rangeEnd }} de {{ totalElements }} registros</span>
 </div>
 
+@if (selectedRow) {
+  <div class="detailCard">
+    <span class="detailClose" (click)="selectedRow = null">&times;</span>
+    <h3>Detalle</h3>
+    <div class="detailGrid">
+      @for (field of detailFields; track field.key) {
+        <div class="detailItem">
+          <span class="detailLabel">{{ field.label }}</span>
+          <span class="detailValue">{{ getDisplayValue(selectedRow, field) }}</span>
+        </div>
+      }
+    </div>
+  </div>
+}
+
 @if (showForm) {
   <div class="formOverlay" (click)="closeForm()"></div>
   <div class="formPanel">
@@ -48,6 +63,14 @@
               <input type="checkbox" [(ngModel)]="formData[field.key]" [name]="field.key">
               {{ field.label }}
             </label>
+          } @else if (field.type === 'select') {
+            <label>{{ field.label }}</label>
+            <select [(ngModel)]="formData[field.key]" [name]="field.key" required>
+              <option value="" disabled>Seleccionar...</option>
+              @for (opt of (field.options || selectOptions[field.key] || []); track opt.value) {
+                <option [ngValue]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
           } @else {
             <label>{{ field.label }}</label>
             <input [type]="field.type" [(ngModel)]="formData[field.key]" [name]="field.key" required>

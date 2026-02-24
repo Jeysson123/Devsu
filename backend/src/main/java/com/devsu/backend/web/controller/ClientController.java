@@ -8,6 +8,7 @@ import com.devsu.backend.domain.factory.ResponseWrapperFactory;
 import com.devsu.backend.infrastructure.persistence.Client;
 import com.devsu.backend.web.config.MessageProvider;
 import com.devsu.backend.web.dto.ResponseWrapper;
+import com.devsu.backend.web.dto.SearchRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -67,11 +68,11 @@ public class ClientController {
     @GetMapping
     @SuppressWarnings("unchecked")
     public ResponseEntity<ResponseWrapper<Map<String, Object>>> getAllClients(
-            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestParam(required = false) String searchTerm) {
 
-        // El dispatch devuelve el Page<Client> completo gracias al cambio en GenericQueryHandler
         Page<Client> page = (Page<Client>) queryBus.dispatch(
-                ActionFactory.createClientAction(ActionType.GET_ALL, pageable)
+                ActionFactory.createClientAction(ActionType.GET_ALL, new SearchRequest(pageable, searchTerm))
         );
 
         return ResponseEntity.ok(

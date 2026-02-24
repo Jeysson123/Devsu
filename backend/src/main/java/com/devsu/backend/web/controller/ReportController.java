@@ -31,9 +31,10 @@ public class ReportController {
             @RequestParam String clientName,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
-            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+            @PageableDefault(page = 0, size = 10) Pageable pageable,
+            @RequestParam(required = false) String searchTerm) {
 
-        var request = ReportFactory.createRequest(clientName, startDate, endDate, pageable);
+        var request = ReportFactory.createRequest(clientName, startDate, endDate, pageable, searchTerm);
         Page<AccountReport> report = queryBus.dispatch(ActionFactory.createReportAction(ActionType.GET_ALL, request));
         return ResponseEntity.ok(ResponseWrapperFactory.paginatedResponse(report, HttpStatus.OK));
     }

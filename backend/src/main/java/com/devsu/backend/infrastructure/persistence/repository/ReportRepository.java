@@ -16,35 +16,43 @@ public class ReportRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Page<AccountReport> getAccountReport(String clientName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
-        // La consulta debe coincidir exactamente con el orden del constructor en AccountReport
-        // Constructor: (date, clientName, accountNumber, accountType, initialBalance, accountStatus, movementAmount, availableBalance)
+    public Page<AccountReport> getAccountReport(String clientName, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable, String searchTerm) {
+        String baseJpql = "FROM Movement m JOIN m.account a JOIN a.client c " +
+                "WHERE c.name = :clientName AND m.date BETWEEN :startDate AND :endDate";
+
+        String searchFilter = "";
+        if (searchTerm != null && !searchTerm.isBlank()) {
+            searchFilter = " AND (LOWER(c.name) LIKE LOWER(CONCAT('%', :term, '%')) " +
+                    "OR LOWER(a.accountNumber) LIKE LOWER(CONCAT('%', :term, '%')) " +
+                    "OR LOWER(a.accountType) LIKE LOWER(CONCAT('%', :term, '%')) " +
+                    "OR CAST(a.initialBalance AS string) LIKE CONCAT('%', :term, '%') " +
+                    "OR CAST(m.amount AS string) LIKE CONCAT('%', :term, '%') " +
+                    "OR CAST(m.balance AS string) LIKE CONCAT('%', :term, '%') " +
+                    "OR CAST(m.date AS string) LIKE CONCAT('%', :term, '%'))";
+        }
+
         String jpql = "SELECT new com.devsu.backend.web.dto.AccountReport(" +
                 "m.date, c.name, a.accountNumber, a.accountType, a.initialBalance, a.status, m.amount, m.balance) " +
-                "FROM Movement m " +
-                "JOIN m.account a " +
-                "JOIN a.client c " +
-                "WHERE c.name = :clientName " +
-                "AND m.date BETWEEN :startDate AND :endDate";
+                baseJpql + searchFilter;
 
-        List<AccountReport> content = entityManager.createQuery(jpql, AccountReport.class)
+        var query = entityManager.createQuery(jpql, AccountReport.class)
                 .setParameter("clientName", clientName)
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate)
                 .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
+                .setMaxResults(pageable.getPageSize());
 
-        // Consulta para contar el total de elementos (necesaria para la paginación)
-        String countJpql = "SELECT COUNT(m) FROM Movement m JOIN m.account a JOIN a.client c " +
-                "WHERE c.name = :clientName AND m.date BETWEEN :startDate AND :endDate";
-
-        Long total = entityManager.createQuery(countJpql, Long.class)
+        String countJpql = "SELECT COUNT(m) " + baseJpql + searchFilter;
+        var countQuery = entityManager.createQuery(countJpql, Long.class)
                 .setParameter("clientName", clientName)
                 .setParameter("startDate", startDate)
-                .setParameter("endDate", endDate)
-                .getSingleResult();
+                .setParameter("endDate", endDate);
 
-        return new PageImpl<>(content, pageable, total);
+        if (searchTerm != null && !searchTerm.isBlank()) {
+            query.setParameter("term", searchTerm);
+            countQuery.setParameter("term", searchTerm);
+        }
+
+        return new PageImpl<>(query.getResultList(), pageable, countQuery.getSingleResult());
     }
 }

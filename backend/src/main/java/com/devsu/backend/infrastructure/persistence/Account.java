@@ -1,7 +1,6 @@
 package com.devsu.backend.infrastructure.persistence;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -39,11 +38,12 @@ public class Account {
     @NotNull(message = "Client is mandatory")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnoreProperties({"accounts", "password"})
     private Client client;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
-    @JsonManagedReference
+    @JsonIgnoreProperties({"account"})
     private Set<Movement> movements = new HashSet<>();
+
 }

@@ -62,11 +62,11 @@ class GenericQueryHandlerTest {
 
         doReturn(Collections.emptyList())
                 .when(reportRepository)
-                .getAccountReport(any(), any(), any(), any());
+                .getAccountReport(any(), any(), any(), any(), any());
 
         Object result = queryHandler.handle(ActionFactory.createReportAction(ActionType.GET_ALL, mockRequest));
 
         assertNotNull(result);
-        verify(reportRepository).getAccountReport(any(), any(), any(), any());
+        verify(reportRepository).getAccountReport(any(), any(), any(), any(), any());
     }
 }
