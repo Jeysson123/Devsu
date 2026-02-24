@@ -1,0 +1,542 @@
+{
+	"info": {
+		"_postman_id": "7ce55e37-5238-453a-a16c-301e42e16a1a",
+		"name": "Devsu",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"if (jsonData.success && jsonData.data) {\r",
+									"    pm.environment.set(\"jwt_token\", jsonData.data.token);\r",
+									"    console.log(\"Token guardado:\", jsonData.data.token);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clientId\":\"{{clientId}}\",\r\n    \"password\":\"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}\\auth",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/clientes?page=0&size=10&searchTerm=devsu",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"clientes"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "searchTerm",
+									"value": "devsu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Jeysson\",\r\n  \"address\": \"losmina\",\r\n  \"phone\": \"8097861534\",\r\n  \"password\": \"pass123\",\r\n  \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}\\clientes",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Devsu88\",\r\n  \"gender\": \"Masculino\",\r\n  \"age\": 30,\r\n  \"identification\": \"12345678\",\r\n  \"address\": \"Street\",\r\n  \"phone\": \"555-0101\",\r\n  \"clientId\": \"CLI-001\",\r\n  \"password\": \"pass123\",\r\n  \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}\\clientes\\1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"clientes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}\\clientes\\2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"clientes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}\\clientes\\1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"clientes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cuentas?page=0&size=10&searchTerm=devsu",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cuentas"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "searchTerm",
+									"value": "devsu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accountNumber\": \"1234567890\",\r\n  \"accountType\": \"Ahorros\",\r\n  \"initialBalance\": 1500.00,\r\n  \"status\": true,\r\n  \"client\": {\r\n    \"id\": 1\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}\\cuentas",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cuentas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accountNumber\": \"1234567890\",\r\n  \"accountType\": \"Ahorros\",\r\n  \"initialBalance\": 1700.00,\r\n  \"status\": true,\r\n  \"client\": {\r\n    \"id\": 1\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}\\cuentas\\1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cuentas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}\\cuentas\\1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cuentas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}\\cuentas\\1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cuentas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movement",
+			"item": [
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/movimientos?page=0&size=10&searchTerm=devsu",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"movimientos"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "searchTerm",
+									"value": "devsu"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"movementType\": \"Debito\",\r\n  \"amount\": 500.0,\r\n  \"balance\": 1000.0,\r\n  \"account\": {\r\n    \"id\": 7\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}\\movimientos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"movimientos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"movementType\": \"Debito\",\r\n  \"amount\": 500.0,\r\n  \"balance\": 2000.0,\r\n  \"account\": {\r\n    \"id\": 5\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}\\movimientos\\1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"movimientos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}\\movimientos\\2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"movimientos",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}\\movimientos\\5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"movimientos",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Report",
+			"item": [
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/reportes?clientName=Jeysson&startDate=2026-02-24T00:00:00&endDate=2026-02-24T23:59:59&?page=0&size=10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reportes"
+							],
+							"query": [
+								{
+									"key": "clientName",
+									"value": "Jeysson"
+								},
+								{
+									"key": "startDate",
+									"value": "2026-02-24T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2026-02-24T23:59:59"
+								},
+								{
+									"key": "?page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fileName\": \"reporte_cuentas_devsu\",\r\n    \"data\": [\r\n        {\r\n            \"Fecha\": \"2026-02-22T07:47:49.722705\",\r\n            \"Cliente\": \"Devsu\",\r\n            \"Cuenta\": \"1234567890\",\r\n            \"Tipo\": \"Ahorros\",\r\n            \"Saldo Inicial\": 0.0,\r\n            \"Estado\": true,\r\n            \"Monto\": 500.0,\r\n            \"Saldo Disponible\": 0.0\r\n        },\r\n        {\r\n            \"Fecha\": \"2026-02-22T07:50:21.221818\",\r\n            \"Cliente\": \"Devsu\",\r\n            \"Cuenta\": \"1234567890\",\r\n            \"Tipo\": \"Ahorros\",\r\n            \"Saldo Inicial\": 0.0,\r\n            \"Estado\": true,\r\n            \"Monto\": 500.0,\r\n            \"Saldo Disponible\": 500.0\r\n        },\r\n        {\r\n            \"Fecha\": \"2026-02-22T07:51:49.997679\",\r\n            \"Cliente\": \"Devsu\",\r\n            \"Cuenta\": \"1234567890\",\r\n            \"Tipo\": \"Ahorros\",\r\n            \"Saldo Inicial\": 0.0,\r\n            \"Estado\": true,\r\n            \"Monto\": 500.0,\r\n            \"Saldo Disponible\": 0.0\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/reportes/exportar",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reportes",
+								"exportar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"",
+					"if (pm.info.requestName === \"Auth\") {",
+					"    var jsonData = pm.response.json();",
+					"    if (jsonData.success && jsonData.data) {",
+					"        pm.environment.set(\"jwt_token\", jsonData.data);",
+					"        console.log(\"Token guardado automáticamente.\");",
+					"    }",
+					"}"
+				]
+			}
+		}
+	]
+}
