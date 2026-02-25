@@ -443,9 +443,16 @@ export class Panel implements OnInit {
     };
 
     this.httpService.post<any>(this.config['movements'].endpoint, payload).subscribe({
-      next: () => { this.movementData = { movementType: '', account: '', amount: null, balance: null }; this.fetchData(); },
+      next: () => { this.movementData = { movementType: '', account: '', amount: null, balance: null };
+       this.fetchData();
+          this.loadAccounts(); //fix update account after movement
+          this.cdr.detectChanges();
+      },
       error: (err) => console.error('[Panel movements] Error:', err)
     });
+
+
+
   }
 
   public getDisplayValue(row: any, field: any): string {
