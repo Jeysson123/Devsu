@@ -98,8 +98,11 @@ public class GenericCommandHandler implements ICommandHandler<GenericAction, Obj
             Movement m = (Movement) payload;
             Account account = accountRepository.findById(m.getAccount().getId())
                     .orElseThrow(() -> new IllegalArgumentException(messageProvider.getAccountNotFound()));
-            accountValidatorService.validateDailyLimit(account, m.getAmount(), m.getMovementType());
+
+            //---- FIX : I change the order validation, check if balance >= amount || balance != 0
             Double newBalance = accountValidatorService.calculateNewBalance(account, m);
+            accountValidatorService.validateDailyLimit(account, m.getAmount(), m.getMovementType());
+
             //account.setInitialBalance(newBalance); //I commented on this line because you cannot alter the balance with which the account was opened.
             accountRepository.save(account);
             Movement movementToSave = MovementFactory.create(account, m.getMovementType(), m.getAmount(), newBalance);
